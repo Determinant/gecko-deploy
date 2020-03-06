@@ -1,0 +1,18 @@
+ansible_connection: ssh
+ansible_user: ymf
+
+testbed_prefix: "~/testbed"
+gecko_network_id: "borealis"
+gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
+gecko_db_dir: "./"
+gecko_log_dir: "./"
+gecko_staking_tls_enabled: false
+base_http_port: 20000
+base_staking_port: 21000
+
+children:
+    borealis_bootstrap:
+        gecko_bootstrap_ips: "127.0.0.1:21001"
+        gecko_bootstrap_ids: "7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg"
+    
+    borealis_node:

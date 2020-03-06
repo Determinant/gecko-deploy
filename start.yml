@@ -1,0 +1,10 @@
+---
+- name: reset and restart the network
+  connection: ssh
+  gather_facts: false
+  hosts: ted
+  tasks:
+      - import_tasks: run.yml
+      - name: print
+        debug:
+            var: gecko_res

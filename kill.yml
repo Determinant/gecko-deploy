@@ -1,0 +1,4 @@
+- name: kill gecko
+  command: kill {{ gecko_res.pid }}
+  ignore_errors: yes
+  when: gecko_res is defined

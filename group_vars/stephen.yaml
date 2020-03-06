@@ -1,0 +1,12 @@
+ansible_connection: ssh
+ansible_user: ubuntu
+
+gecko_network_id: "borealis"
+gecko_db_dir: "/home/ubuntu/db"
+gecko_log_dir: "/home/ubuntu/.gecko"
+
+borealis_bootstrap:
+    gecko_bootstrap_ips: "3.227.207.132:21001"
+    gecko_bootstrap_ids: "7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg"
+
+borealis_node:

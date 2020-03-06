@@ -1,0 +1,49 @@
+- vars:
+    nid: "{{ node_id | default(0) }}"
+    testbed: "{{ (testbed_prefix, nid) | path_join }}"
+    db_dir: "{{ (testbed, gecko_db_dir) | path_join }}"
+    log_dir: "{{ (testbed, gecko_log_dir) | path_join }}"
+  block:
+    - name: create testbed dirs
+      block:
+        - file:
+              path: "{{ db_dir }}"
+              state: directory
+        - file:
+              path: "{{ log_dir }}"
+              state: directory
+    - name: start node
+      gecko:
+          bin: "{{ gecko_bin | default('~/go/src/github.com/ava-labs/gecko/build/ava') }}"
+          cwd: "{{ gecko_cwd | default('~/go/src/github.com/ava-labs/gecko/') }}"
+          network_id: "{{ gecko_network_id }}"
+          api_admin_enabled: "{{ gecko_api_admin_enabled | default(true)}}"
+          api_keystore_enabled: "{{ gecko_api_keystore_enabled | default(true) }}"
+          api_metrics_enabled: "{{ gecko_api_metrics_enabled | default(true) }}"
+          ava_tx_fee: "{{ gecko_ava_tx_fee | default(0) }}"
+          assertions_enabled: "{{ gecko_assertions_enabled | default(true) }}"
+          signature_verification_enabled: "{{ gecko_signature_verification_enabled | default(true) }}"
+          db_enabled: "{{ gecko_db_enabled | default(true) }}"
+          db_dir: "{{ db_dir }}"
+          http_port: "{{ (base_http_port | default(20000)) + (nid | int)}}"
+          http_tls_enabled: "{{ gecko_http_tls_enabled | default(false) }}"
+          http_tls_key_file: "{{ gecko_http_tls_key_file | default('') }}"
+          http_tls_cert_file: "{{ gecko_http_tls_cert_file | default('') }}"
+          bootstrap_ips: "{{ gecko_bootstrap_ips | default('') }}"
+          bootstrap_ids: "{{ gecko_bottstrap_ids | default('') }}"
+          staking_port: "{{ (base_staking_port | default(21000)) + (nid | int)}}"
+          staking_tls_enabled: "{{ gecko_staking_tls_enabled | default(true) }}"
+          log_dir: "{{ log_dir }}"
+          log_level: "{{ gecko_log_level | default('debug') }}"
+          snow_sample_size: "{{ gecko_snow_sample_size | default(3) }}"
+          snow_quorum_size: "{{ gecko_snow_quorum_size | default(2) }}"
+          snow_virtuous_commit_threshold: "{{ gecko_snow_virtuous_commit_threshold | default(20) }}"
+          snow_rogue_commit_threshold: "{{ gecko_snow_rogue_commit_threshold | default(30) }}"
+          snow_avalanche_num_parents: "{{ gecko_snow_avalanche_num_parents | default(5) }}"
+          snow_avalanche_batch_size: "{{ gecko_snow_avalanche_batch_size | default(30) }}"
+          public_ip: "{{ node_ip }}"
+      vars:
+          ansible_python_interpreter: /usr/bin/python3
+      environment:
+          PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin
+      register: gecko_res
