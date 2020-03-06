@@ -259,7 +259,7 @@ def run_module():
         module.params[arg] = os.path.expanduser(module.params[arg])
 
     try:
-        cmd = [module.params['bin']]
+        cmd = ['nohup', module.params['bin']]
         for arg in ava_args:
             val = module.params[arg]
             if not (val is None):
