@@ -1,26 +1,25 @@
 ---
+- import_playbook: helper/env.yml
+- import_playbook: helper/load_state.yml
+
+- hosts: localhost
+  tasks:
+      - file:
+          path: "{{ work_dir }}"
+          state: directory
+      - name: check the state status
+        fail: msg="nodes are already started"
+        when: last_state['status']  == "started"
+
 - name: reset and restart the network
   connection: ssh
   gather_facts: false
   hosts: ted
   tasks:
-      - import_tasks: run.yml
-      - set_fact:
-          gecko_res: "{{ gecko_res }}"
-
-- name: save the state to state.json
-  hosts: localhost
+      - import_tasks: helper/run.yml
+- hosts: localhost
   tasks:
-    - set_fact:
-        all_results: "{{ dict(groups['ted'] | zip(results)) }}"
-      vars:
-        results: >-
-            {{
-              groups["ted"]
-              | map("extract", hostvars)
-              | map(attribute="gecko_res")
-              | list
-            }}
-    - copy:
-        content="{{ all_results }}"
-        dest=./state.json
+      - set_fact:
+          cur_state: "{{ last_state | combine({'status': 'started'}) }}"
+- import_playbook: helper/update_spawn_state.yml
+- import_playbook: helper/save_state.yml

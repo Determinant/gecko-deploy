@@ -1,12 +1,10 @@
-- name: reset gecko state
-  block:
-      - name: reset database
-        file:
-          path: "{{ gecko_db_dir }}"
-          state: absent
-        when: "gecko_no_reset_db is not defined or (gecko_no_reset_db == False)"
-      - name: remove old logs
-        file:
-          path: "{{ gecko_log_dir }}"
-          state: absent
-        when: "gecko_no_reset_log is not defined or (gecko_no_reset_log == False)"
+---
+- import_playbook: helper/load_state.yml
+- name: reset and restart the network
+  connection: ssh
+  gather_facts: false
+  hosts: ted
+  tasks:
+      - import_tasks: helper/kill.yml
+      - import_tasks: helper/build.yml
+      - import_tasks: helper/reset.yml

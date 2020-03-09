@@ -1,0 +1,17 @@
+- name: save the state to state.json
+  hosts: localhost
+  tasks:
+    - set_fact:
+        all_results: "{{ dict(groups['ted'] | zip(results)) | default({}) }}"
+      vars:
+        results: >-
+            {{
+              groups["ted"]
+              | map("extract", hostvars)
+              | map(attribute="check_results")
+              | map(attribute="rc")
+              | map("not")
+              | list
+            }}
+    - set_fact:
+        cur_state: "{{ cur_state | combine({'check_results':all_results}) }}"

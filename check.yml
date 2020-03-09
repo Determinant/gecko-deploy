@@ -1,0 +1,17 @@
+---
+- import_playbook: helper/env.yml
+- import_playbook: helper/load_state.yml
+
+- name: check if nodes are still running
+  hosts: ted
+  tasks:
+    - import_tasks: helper/check.yml
+      vars:
+        last_state: "{{ hostvars['localhost']['last_state'] }}"
+
+- hosts: localhost
+  tasks:
+      - set_fact:
+          cur_state: "{{ last_state }}"
+- import_playbook: helper/update_check_state.yml
+- import_playbook: helper/save_state.yml

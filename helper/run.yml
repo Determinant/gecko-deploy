@@ -1,6 +1,6 @@
 - vars:
     nid: "{{ node_id | default(0) }}"
-    testbed: "{{ (testbed_prefix, nid) | path_join }}"
+    testbed: "{{ (testbed_prefix, run_id, nid) | path_join }}"
     db_dir: "{{ (testbed, gecko_db_dir) | path_join }}"
     log_dir: "{{ (testbed, gecko_log_dir) | path_join }}"
   block:
@@ -46,4 +46,4 @@
           ansible_python_interpreter: /usr/bin/python3
       environment:
           PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/local/go/bin
-      register: gecko_res
+      register: gecko_run_res

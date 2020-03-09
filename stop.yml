@@ -1,0 +1,21 @@
+---
+- import_playbook: helper/env.yml
+- import_playbook: helper/load_state.yml
+
+- hosts: localhost
+  tasks:
+      - name: check the state status
+        fail: msg="nodes are not running"
+        when: last_state['status']  != "started"
+
+- name: stop all nodes
+  hosts: ted
+  tasks:
+    - import_tasks: helper/stop.yml
+      vars:
+        last_state: "{{ hostvars['localhost']['last_state'] }}"
+- hosts: localhost
+  tasks:
+      - set_fact:
+          cur_state: "{{ last_state | combine({'status': 'stopped'}) }}"
+- import_playbook: helper/save_state.yml
