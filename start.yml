@@ -5,6 +5,22 @@
   hosts: ted
   tasks:
       - import_tasks: run.yml
-      - name: print
-        debug:
-            var: gecko_res
+      - set_fact:
+          gecko_res: "{{ gecko_res }}"
+
+- name: save the state to state.json
+  hosts: localhost
+  tasks:
+    - set_fact:
+        all_results: "{{ dict(groups['ted'] | zip(results)) }}"
+      vars:
+        results: >-
+            {{
+              groups["ted"]
+              | map("extract", hostvars)
+              | map(attribute="gecko_res")
+              | list
+            }}
+    - copy:
+        content="{{ all_results }}"
+        dest=./state.json
