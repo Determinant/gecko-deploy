@@ -14,7 +14,7 @@
 - name: start the nodes
   hosts: "{{ host_group | default('all') }}"
   tasks:
-    - import_tasks: helper/run.yml
+    - import_tasks: "{{ run_tasks | default('../app/run.yml') }}"
 - hosts: localhost
   tasks:
     - set_fact:

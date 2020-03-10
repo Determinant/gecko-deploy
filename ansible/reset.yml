@@ -6,5 +6,5 @@
   hosts: "{{ host_group | default('all') }}"
   tasks:
       - import_tasks: helper/kill.yml
-      - import_tasks: helper/build.yml
-      - import_tasks: helper/reset.yml
+      - import_tasks: "{{ build_tasks | default('../app/build.yml') }}"
+      - import_tasks: "{{ reset_tasks | default('../app/reset.yml') }}"
