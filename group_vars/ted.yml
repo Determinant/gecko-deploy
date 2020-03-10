@@ -6,8 +6,8 @@ bin_name: "gecko"
 testbed_prefix: "~/testbed"
 gecko_network_id: "borealis"
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
-gecko_db_dir: "./"
-gecko_log_dir: "./"
+gecko_db_dir: "db"
+gecko_log_dir: "log"
 gecko_staking_tls_enabled: false
 base_http_port: 20000
 base_staking_port: 21000

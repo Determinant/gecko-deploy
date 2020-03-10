@@ -1,5 +1,7 @@
 ---
+- import_playbook: helper/env.yml
 - import_playbook: helper/load_state.yml
+
 - name: kill all nodes and reset their states
   hosts: "{{ host_group | default('all') }}"
   tasks:
