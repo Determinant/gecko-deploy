@@ -9,7 +9,7 @@
             {{
               groups["ted"]
               | map("extract", hostvars)
-              | map(attribute="gecko_run_res")
+              | map(attribute="spawn_results")
               | list
             }}
     - set_fact:

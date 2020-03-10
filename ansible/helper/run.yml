@@ -47,4 +47,4 @@
         ansible_python_interpreter: /usr/bin/python3
       environment:
         PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/local/go/bin
-      register: gecko_run_res
+      register: spawn_results
