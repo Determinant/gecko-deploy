@@ -7,6 +7,4 @@
         dest: "{{ local_dir }}"
         mode: pull
   vars:
-    nid: "{{ node_id | default(0) }}"
-    testbed: "{{ (testbed_prefix, run_id, nid, '') | path_join }}"
     local_dir: "{{ (work_dir, 'remote', nid) | path_join }}"
