@@ -1,3 +1,4 @@
+---
 - name: kill gecko
   command: killall -9 {{ bin_name }}
-  ignore_errors: yes
+  ignore_errors: true

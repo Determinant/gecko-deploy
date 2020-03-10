@@ -1,3 +1,4 @@
+---
 - name: build gecko
   command: ./scripts/build.sh
   args:

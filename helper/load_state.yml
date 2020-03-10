@@ -1,3 +1,4 @@
+---
 - name: load the state from state.json
   hosts: localhost
   tasks:

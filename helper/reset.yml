@@ -1,3 +1,4 @@
+---
 - name: reset gecko state
   vars:
     nid: "{{ node_id | default(0) }}"
@@ -5,13 +6,13 @@
     db_dir: "{{ (testbed, gecko_db_dir) | path_join }}"
     log_dir: "{{ (testbed, gecko_log_dir) | path_join }}"
   block:
-      - name: reset database
-        file:
-          path: "{{ db_dir }}"
-          state: absent
-        when: "gecko_no_reset_db is not defined or (gecko_no_reset_db == False)"
-      - name: remove old logs
-        file:
-          path: "{{ log_dir }}"
-          state: absent
-        when: "gecko_no_reset_log is not defined or (gecko_no_reset_log == False)"
+    - name: reset database
+      file:
+        path: "{{ db_dir }}"
+        state: absent
+      when: "gecko_no_reset_db is not defined or (gecko_no_reset_db == False)"
+    - name: remove old logs
+      file:
+        path: "{{ log_dir }}"
+        state: absent
+      when: "gecko_no_reset_log is not defined or (gecko_no_reset_log == False)"

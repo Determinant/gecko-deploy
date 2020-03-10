@@ -4,9 +4,9 @@
 
 - hosts: localhost
   tasks:
-      - name: check the state status
-        fail: msg="nodes are not running"
-        when: last_state['status']  != "started"
+    - name: check the state status
+      fail: msg="nodes are not running"
+      when: last_state['status']  != "started"
 
 - name: stop all nodes
   hosts: "{{ host_group | default('all') }}"
@@ -16,6 +16,6 @@
         last_state: "{{ hostvars['localhost']['last_state'] }}"
 - hosts: localhost
   tasks:
-      - set_fact:
-          cur_state: "{{ last_state | combine({'status': 'stopped'}) }}"
+    - set_fact:
+        cur_state: "{{ last_state | combine({'status': 'stopped'}) }}"
 - import_playbook: helper/save_state.yml

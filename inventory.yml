@@ -1,19 +1,19 @@
 ted:
-    children:
-        ted_bootstrap:
-          hosts:
-              bootstrap1:
-                  ansible_host: tedharbor.ava.network
-                  node_ip: "127.0.0.1"
-                  node_id: 0
-        
-        ted_nodes:
-          hosts:
-              node1:
-                  ansible_host: tedharbor.ava.network
-                  node_ip: "127.0.0.1"
-                  node_id: 1
-              node2:
-                  ansible_host: tedharbor.ava.network
-                  node_ip: "127.0.0.1"
-                  node_id: 2
+  children:
+    ted_bootstrap:
+      hosts:
+        bootstrap1:
+          ansible_host: tedharbor.ava.network
+          node_ip: "127.0.0.1"
+          node_id: 0
+          staking_port: 22000
+    ted_nodes:
+      hosts:
+        node1:
+          ansible_host: tedharbor.ava.network
+          node_ip: "127.0.0.1"
+          node_id: 1
+        node2:
+          ansible_host: tedharbor.ava.network
+          node_ip: "127.0.0.1"
+          node_id: 2

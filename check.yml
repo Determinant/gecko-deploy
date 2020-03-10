@@ -11,19 +11,19 @@
 
 - hosts: localhost
   tasks:
-      - set_fact:
-          cur_state: "{{ last_state }}"
+    - set_fact:
+        cur_state: "{{ last_state }}"
 - import_playbook: helper/update_check_state.yml
 - import_playbook: helper/save_state.yml
 - hosts: localhost
   vars:
-      ok: "{{ cur_state['check_results'].values() | all }}"
+    ok: "{{ cur_state['check_results'].values() | all }}"
   tasks:
-      - debug:
-            msg: "all nodes are ok"
-        tags: [print_action]
-        when: ok
-      - fail:
-            msg: "some nodes are not running"
-        tags: [print_action]
-        when: not ok
+    - debug:
+        msg: "all nodes are ok"
+      tags: [print_action]
+      when: ok
+    - fail:
+        msg: "some nodes are not running"
+      tags: [print_action]
+      when: not ok

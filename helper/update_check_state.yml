@@ -1,3 +1,4 @@
+---
 - name: save the state to state.json
   hosts: localhost
   tasks:
