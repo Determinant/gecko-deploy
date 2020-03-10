@@ -3,7 +3,7 @@
 - import_playbook: helper/load_state.yml
 
 - name: check if nodes are still running
-  hosts: ted
+  hosts: "{{ host_group | default('all') }}"
   tasks:
     - import_tasks: helper/check.yml
       vars:

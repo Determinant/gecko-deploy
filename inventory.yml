@@ -1,13 +1,13 @@
 ted:
     children:
-        borealis_bootstrap:
+        ted_bootstrap:
           hosts:
               bootstrap1:
                   ansible_host: tedharbor.ava.network
                   node_ip: "127.0.0.1"
                   node_id: 0
         
-        borealis_node:
+        ted_nodes:
           hosts:
               node1:
                   ansible_host: tedharbor.ava.network

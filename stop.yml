@@ -9,7 +9,7 @@
         when: last_state['status']  != "started"
 
 - name: stop all nodes
-  hosts: ted
+  hosts: "{{ host_group | default('all') }}"
   tasks:
     - import_tasks: helper/stop.yml
       vars:

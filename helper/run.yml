@@ -30,7 +30,7 @@
           http_tls_key_file: "{{ gecko_http_tls_key_file | default('') }}"
           http_tls_cert_file: "{{ gecko_http_tls_cert_file | default('') }}"
           bootstrap_ips: "{{ gecko_bootstrap_ips | default('') }}"
-          bootstrap_ids: "{{ gecko_bottstrap_ids | default('') }}"
+          bootstrap_ids: "{{ gecko_bootstrap_ids | default('') }}"
           staking_port: "{{ (base_staking_port | default(21000)) + (nid | int)}}"
           staking_tls_enabled: "{{ gecko_staking_tls_enabled | default(true) }}"
           log_dir: "{{ log_dir }}"

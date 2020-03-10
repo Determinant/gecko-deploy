@@ -12,8 +12,6 @@
         when: last_state['status']  == "started"
 
 - name: reset and restart the network
-  connection: ssh
-  gather_facts: false
   hosts: "{{ host_group | default('all') }}"
   tasks:
       - import_tasks: helper/run.yml

@@ -1,9 +1,7 @@
 ---
 - import_playbook: helper/load_state.yml
 - name: reset and restart the network
-  connection: ssh
-  gather_facts: false
-  hosts: ted
+  hosts: "{{ host_group | default('all') }}"
   tasks:
       - import_tasks: helper/kill.yml
       - import_tasks: helper/build.yml
