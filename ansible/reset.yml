@@ -1,6 +1,6 @@
 ---
 - import_playbook: helper/load_state.yml
-- name: reset and restart the network
+- name: kill all nodes and reset their states
   hosts: "{{ host_group | default('all') }}"
   tasks:
       - import_tasks: helper/kill.yml

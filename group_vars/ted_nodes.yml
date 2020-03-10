@@ -1,2 +1,3 @@
+---
 gecko_bootstrap_ips: "{{ '{}:{}'.format(hostvars['bootstrap1']['node_ip'], hostvars['bootstrap1']['staking_port']) }}"
 gecko_bootstrap_ids: "7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg"
