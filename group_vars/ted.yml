@@ -2,7 +2,7 @@
 ansible_connection: ssh
 ansible_user: ymf
 
-bin_name: "gecko"
+bin_name: "ava"
 testbed_prefix: "~/testbed"
 gecko_network_id: "borealis"
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"

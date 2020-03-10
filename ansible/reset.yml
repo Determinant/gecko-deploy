@@ -5,6 +5,16 @@
 - name: kill all nodes and reset their states
   hosts: "{{ host_group | default('all') }}"
   tasks:
-      - import_tasks: helper/kill.yml
-      - import_tasks: "{{ build_tasks | default('../app/build.yml') }}"
-      - import_tasks: "{{ reset_tasks | default('../app/reset.yml') }}"
+    - import_tasks: helper/kill.yml
+    - import_tasks: "{{ build_tasks | default('../app/build.yml') }}"
+    - import_tasks: "{{ reset_tasks | default('../app/reset.yml') }}"
+  vars:
+    last_state: "{{ hostvars['localhost']['last_state'] }}"
+    node_id: "{{ node_id | default(0) }}"
+    testbed: "{{ (testbed_prefix, run_id, nid) | path_join }}"
+
+- hosts: localhost
+  tasks:
+    - set_fact:
+        cur_state: "{{ last_state | combine({'status': 'stopped'}) }}"
+- import_playbook: helper/save_state.yml

@@ -1,7 +1,5 @@
 ---
 - vars:
-    nid: "{{ node_id | default(0) }}"
-    testbed: "{{ (testbed_prefix, run_id, nid) | path_join }}"
     db_dir: "{{ (testbed, gecko_db_dir) | path_join }}"
     log_dir: "{{ (testbed, gecko_log_dir) | path_join }}"
   block:
@@ -26,13 +24,13 @@
         signature_verification_enabled: "{{ gecko_signature_verification_enabled | default(true) }}"
         db_enabled: "{{ gecko_db_enabled | default(true) }}"
         db_dir: "{{ db_dir }}"
-        http_port: "{{ http_port | default((base_http_port | default(20000)) + (nid | int)) }}"
+        http_port: "{{ http_port | default((base_http_port | default(20000)) + (node_id | int)) }}"
         http_tls_enabled: "{{ gecko_http_tls_enabled | default(false) }}"
         http_tls_key_file: "{{ gecko_http_tls_key_file | default('') }}"
         http_tls_cert_file: "{{ gecko_http_tls_cert_file | default('') }}"
         bootstrap_ips: "{{ gecko_bootstrap_ips | default('') }}"
         bootstrap_ids: "{{ gecko_bootstrap_ids | default('') }}"
-        staking_port: "{{ staking_port | default((base_staking_port | default(21000)) + (nid | int)) }}"
+        staking_port: "{{ staking_port | default((base_staking_port | default(21000)) + (node_id | int)) }}"
         staking_tls_enabled: "{{ gecko_staking_tls_enabled | default(true) }}"
         log_dir: "{{ log_dir }}"
         log_level: "{{ gecko_log_level | default('debug') }}"
