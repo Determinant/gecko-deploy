@@ -9,6 +9,7 @@
           - make
           - curl
           - g++
+          - golang-go
         state:
           latest
       become: true
