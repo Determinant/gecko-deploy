@@ -1,33 +1,23 @@
 How to Use
 ==========
 
+Clone and ``cd gecko-deploy``.
+
 Update submodule:
 ::
 
     git submodule update --init --recursive
 
-Make sure gecko source code is in ``./gecko`` (see ``group_vars/all.yml``)
+Make sure gecko source code is in ``./gecko`` (see NOTE):
+::
 
-The files that need to be configured according to your setup:
+    git clone https://github.com/ava-labs/gecko.git
 
-- ``group_vars/all.yml`` -- configuration applied to all nodes
-- ``group_vars/nodes_non_bootstrap.yml`` -- configuration only applied to those regular (non-bootstrap) nodes
-
-NOTE: see ``app/run.yml`` for all available options passed to the app
-
-- ``nodes.ini``
-
-  - ``nodes_setup`` section: list the distinct machines that are used to host nodes
-  - ``nodes_non_bootstrap`` section: list the regular nodes
-  - ``nodes`` section: list the bootstrap nodes (regular nodes are already included)
-- ``nodes.yml`` is the yaml version of ``nodes.ini``, *not* used by default
-
-  NOTE: the same machine could host multiple nodes at the same time, to allow
-  such multi-node hosts, use an unique ``host_idx=`` to distinguish them
+Change all ``tedharbor.ava.network`` in nodes.ini to the ip of your AWS Ubuntu instance.
 
 Then install/setup the required environment on all machines (assuming the ssh
 info in ``group_vars/all.yml`` has sudo permision without password, such as
-``ubuntu`` user in an AWS instance).
+``ubuntu`` user in an AWS instance). This step is required only once.
 
 ::
 
@@ -64,3 +54,23 @@ Reset the run (database, logs and rebuild):
 ::
 
     ./run.sh reset deployment1
+
+NOTE
+----
+
+The files that might be configured according to your setup:
+
+- ``group_vars/all.yml`` -- configuration applied to all nodes
+- ``group_vars/nodes_non_bootstrap.yml`` -- configuration only applied to those regular (non-bootstrap) nodes
+
+NOTE: see ``app/run.yml`` for all available options passed to the app
+
+- ``nodes.ini``
+
+  - ``nodes_setup`` section: list the distinct machines that are used to host nodes
+  - ``nodes_non_bootstrap`` section: list the regular nodes
+  - ``nodes`` section: list the bootstrap nodes (regular nodes are already included)
+- ``nodes.yml`` is the yaml version of ``nodes.ini``, *not* used by default
+
+  NOTE: the same machine could host multiple nodes at the same time, to allow
+  such multi-node hosts, use an unique ``host_idx=`` to distinguish them.
