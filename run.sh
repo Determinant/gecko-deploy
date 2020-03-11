@@ -2,15 +2,15 @@
 
 node_group=nodes
 node_setup_group=nodes_setup
-node_file=nodes.yml
+node_file=nodes.ini
 
-function die { echo "$1"; exit 1; }
+function die { echo "error: $1"; exit 1; }
 function print_help {
 echo "Usage: $0 [--group] [--nodes] [--help] COMMAND RUNID
 
     --help                      show this help and exit
     --group                     specify the ansible group name
-    --nodes                     specify the ansible inventory
+    --nodes                     specify the ansible inventory (.ini or .yml/.yaml)
 
 COMMAND
     setup                       setup the environment before launch (once is enough)
@@ -36,7 +36,7 @@ function _check_id {
 
 function check_id {
     id=${1%/}
-    (_check_id "$id" && [[ -f "$id/nodes.yml" ]]) || die "invalid id"
+    (_check_id "$id" && [[ -f "$id/nodes" ]]) || die "invalid runid"
     workdir="$id"
 }
 
@@ -59,45 +59,45 @@ function _new {
         die "$workdir already exists"
     fi
     mkdir -p "$workdir"
-    cp "$node_file" "$workdir/nodes.yml"
+    cp "$node_file" "$workdir/nodes"
     cp -r group_vars/ "$workdir"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _start {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _stop {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/stop.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/stop.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _check {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/check.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/check.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _fetch {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/fetch.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/fetch.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _reset {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/reset.yml --extra-vars "run_id=$workdir node_group=$node_group"
+    ansible-playbook -i "$workdir/nodes" ansible/reset.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 

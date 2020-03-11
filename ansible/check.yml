@@ -8,7 +8,7 @@
     - import_tasks: helper/check.yml
   vars:
     last_state: "{{ hostvars['localhost']['last_state'] }}"
-    nid: "{{ node_id | default(0) }}"
+    nid: "{{ host_idx | default(0) }}"
     ngroup: "{{ node_group | default('nodes') }}"
     testbed: "{{ (testbed_prefix, run_id, nid, '') | path_join }}"
 

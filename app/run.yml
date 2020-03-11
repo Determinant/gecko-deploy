@@ -40,8 +40,7 @@
         snow_rogue_commit_threshold: "{{ gecko_snow_rogue_commit_threshold | default(30) }}"
         snow_avalanche_num_parents: "{{ gecko_snow_avalanche_num_parents | default(5) }}"
         snow_avalanche_batch_size: "{{ gecko_snow_avalanche_batch_size | default(30) }}"
-        #public_ip: "{{ node_ip | default(ansible_default_ipv4.address) }}"
-        public_ip: "{{ node_ip }}"
+        public_ip: "{{ listen_ip | default(ansible_default_ipv4.address) }}"
       vars:
         ansible_python_interpreter: /usr/bin/python3
       environment:
