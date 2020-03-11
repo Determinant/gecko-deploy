@@ -1,4 +1,7 @@
 ---
+# available vars:
+# workdir -- the local directory of run_id
+
 - name: setup gecko binaries
   block:
     - apt_repository:
@@ -24,7 +27,7 @@
     - synchronize:
         archive: true
         delete: true
-        src: "{{ (work_dir, gecko_local_repo_dir, '') | path_join }}"
+        src: "{{ (workdir, gecko_local_repo_dir, '') | path_join }}"
         dest: "{{ gecko_repo_dir }}"
         mode: push
     - import_tasks: build.yml

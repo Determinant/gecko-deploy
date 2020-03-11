@@ -268,10 +268,11 @@ def run_module():
                     cmd.append("{}={}".format(_arg, "true" if val else "false"))
                 else:
                     cmd.append("{}={}".format(_arg, val))
+        null = open("/dev/null", "w")
         pid = subprocess.Popen(
             cmd,
             cwd=module.params['cwd'],
-            stdout=None, stderr=None, env=os.environ).pid
+            stdout=null, stderr=null, env=os.environ).pid
         module.exit_json(changed=False, status=0, pid=pid, cmd=" ".join(cmd))
     except (OSError, subprocess.SubprocessError) as e:
         module.fail_json(msg=str(e), changed=False, status=1)
