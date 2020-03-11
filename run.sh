@@ -1,15 +1,26 @@
 #!/bin/bash
 
-host_group=all
+node_group=nodes
+node_setup_group=nodes_setup
 node_file=nodes.yml
 
 function die { echo "$1"; exit 1; }
 function print_help {
-echo "Usage: $0 [--group] [--nodes] [--help] COMMAND WORKDIR
+echo "Usage: $0 [--group] [--nodes] [--help] COMMAND RUNID
 
     --help                      show this help and exit
     --group                     specify the ansible group name
-    --nodes                     specify the ansible inventory"
+    --nodes                     specify the ansible inventory
+
+COMMAND
+    setup                       setup the environment before launch (once is enough)
+    new                         launch the nodes and create a workdir with RUNID
+    check                       check whether nodes are still running
+    stop                        stop all nodes
+    fetch                       fetch back the generated files from the remote
+    start                       start all nodes (if they're not running)
+    reset                       force stop all nodes and reset their states
+"
     exit 0
 }
 
@@ -37,6 +48,10 @@ function unlock {
     rm "$1/lock"
 }
 
+function _setup {
+    ansible-playbook -i "$node_file" ansible/_setup.yml --extra-vars "node_setup_group=$node_setup_group" "$@"
+}
+
 function _new {
     _check_id "$1"
     workdir="$id"
@@ -47,42 +62,42 @@ function _new {
     cp "$node_file" "$workdir/nodes.yml"
     cp -r group_vars/ "$workdir"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _start {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/start.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _stop {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/stop.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/stop.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _check {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/check.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/check.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _fetch {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/fetch.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/fetch.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
 function _reset {
     check_id "$1"
     try_lock "$workdir"
-    ansible-playbook -i "$workdir/nodes.yml" ansible/reset.yml --extra-vars "run_id=$workdir host_group=$host_group"
+    ansible-playbook -i "$workdir/nodes.yml" ansible/reset.yml --extra-vars "run_id=$workdir node_group=$node_group"
     unlock "$workdir"
 }
 
@@ -101,7 +116,7 @@ eval set -- "$PARSED"
 
 while true; do
     case "$1" in
-        --group) host_group="$2"; shift 2;;
+        --group) node_group="$2"; shift 2;;
         --help) print_help; shift 1;;
         --nodes) node_file="$2"; shift 2;;
         --) shift; break;;
@@ -111,6 +126,7 @@ done
 cmd="$1"
 shift 1
 case "$cmd" in
+    setup) check_argnum 0 "$@" && _setup ;;
     new) check_argnum 1 "$@" && _new "$1" ;;
     start) check_argnum 1 "$@" && _start "$1" ;;
     stop) check_argnum 1 "$@" && _stop "$1" ;;

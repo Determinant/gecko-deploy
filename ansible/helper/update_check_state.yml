@@ -3,11 +3,11 @@
   hosts: localhost
   tasks:
     - set_fact:
-        all_results: "{{ dict(groups['ted'] | zip(results)) | default({}) }}"
+        all_results: "{{ dict(groups[ngroup] | zip(results)) | default({}) }}"
       vars:
         results: >-
             {{
-              groups["ted"]
+              groups[ngroup]
               | map("extract", hostvars)
               | map(attribute="check_results")
               | map(attribute="rc")

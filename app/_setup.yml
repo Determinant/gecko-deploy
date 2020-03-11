@@ -1,0 +1,25 @@
+---
+- name: setup gecko binaries
+  block:
+    - apt:
+        pkg:
+          - libssl-dev
+          - libuv1-dev
+          - cmake
+          - make
+          - curl
+          - g++
+        state:
+          latest
+      become: true
+      become_user: root
+    - file:
+        path: "{{ gecko_repo_dir }}"
+        state: directory
+    - synchronize:
+        archive: true
+        delete: true
+        src: "{{ (work_dir, gecko_local_repo_dir, '') | path_join }}"
+        dest: "{{ gecko_repo_dir }}"
+        mode: push
+    - import_tasks: build.yml

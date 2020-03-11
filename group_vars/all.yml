@@ -1,11 +1,13 @@
 ---
 ansible_connection: ssh
-ansible_user: ymf
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ~/.ssh/ted-ava-key.pem
 
 bin_name: "ava"
 testbed_prefix: "~/testbed"
 gecko_network_id: "borealis"
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
+gecko_local_repo_dir: "./gecko"
 gecko_db_dir: "db"
 gecko_log_dir: "log"
 gecko_staking_tls_enabled: false
