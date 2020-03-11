@@ -1,6 +1,13 @@
 How to Use
 ==========
 
+Update submodule:
+::
+
+    git submodule update --init --recursive
+
+Make sure gecko source code is in ``./gecko`` (see ``group_vars/all.yml``)
+
 The files that need to be configured according to your setup:
 
 - ``group_vars/all.yml`` -- configuration applied to all nodes
