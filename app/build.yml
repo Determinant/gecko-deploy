@@ -4,4 +4,4 @@
   args:
       chdir: "{{ gecko_repo_dir }}"
   environment:
-      PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/local/go/bin
+      PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/lib/go-1.13/bin
