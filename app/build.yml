@@ -1,6 +1,6 @@
 ---
 - name: build gecko
-  command: ./scripts/build.sh
+  command: rm ./build -r && ./scripts/build.sh
   args:
       chdir: "{{ gecko_repo_dir }}"
   environment:

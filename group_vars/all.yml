@@ -12,7 +12,7 @@ testbed_prefix: "~/testbed"
 
 ## app specific config
 
-gecko_network_id: "borealis"
+gecko_network_id: "denali"
 # remote repo path
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
 # local source code path (that will be copied to the remote)

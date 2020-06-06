@@ -22,6 +22,14 @@ options:
         description: If true, this node exposes the Admin API (default true)
         required: false
         type: bool
+    api_health_enabled:
+        description: If true, this node exposes the Health API (default true)
+        required: false
+        type: bool
+    api_ipcs_enabled
+        description: If true, IPCs can be opened
+        required: false
+        type: bool
     api_keystore_enabled:
         description: If true, this node exposes the Keystore API (default true)
         required: false
@@ -54,6 +62,10 @@ options:
         description: Turn on persistent storage (default true)
         required: false
         type: bool
+    http_host:
+        description: Address of the HTTP server (default "127.0.0.1")
+        required: false
+        type: str
     http_port:
         description: Port of the HTTP server (default 9650)
         required: false
@@ -91,6 +103,10 @@ options:
         description: Network ID this node will connect to (default "mainnet")
         required: false
         type: str
+    plugin_dir:
+        description: Plugin directory for Ava VMs (default "./build/plugins")
+        required: false
+        type: str
     public_ip:
         description: Public IP of this node
         required: false
@@ -100,19 +116,19 @@ options:
         required: false
         type: bool
     snow_avalanche_batch_size:
-        description:
-            - Number of operations to batch in each new vertex (default 30)
+        description: Number of operations to batch in each new vertex (default 30)
         required: false
         type: int
     snow_avalanche_num_parents:
-        description:
-            - Number of vertexes for reference from each new vertex (default 5)
+        description: Number of vertexes for reference from each new vertex (default 5)
+        required: false
+        type: int
+    snow_concurrent_repolls:
+        description: Minimum number of concurrent polls for finalizing consensus (default 1)
         required: false
         type: int
     snow_quorum_size:
-        description:
-            - Alpha value to use for required number positive results (default
-              18)
+        description: Alpha value to use for required number positive results (default 4)
         required: false
         type: int
     snow_rogue_commit_threshold:
@@ -120,8 +136,7 @@ options:
         required: false
         type: int
     snow_sample_size:
-        description:
-            - Number of nodes to query for each network poll (default 20)
+        description: Number of nodes to query for each network poll (default 5)
         required: false
         type: int
     snow_virtuous_commit_threshold:
@@ -137,8 +152,7 @@ options:
         required: false
         type: str
     staking_tls_enabled:
-        description:
-            - Require TLS to authenticate staking connections (default true)
+        description: Require TLS to authenticate staking connections (default true)
         required: false
         type: str
     staking_tls_key_file:
@@ -150,8 +164,7 @@ options:
         required: false
         type: str
     xput_server_port uint
-        description:
-            - Port of the deprecated throughput test server (default 9652)
+        description: Port of the deprecated throughput test server (default 9652)
         required: false
         type: str
 
@@ -177,6 +190,8 @@ def run_module():
             type='str',
             default='~/go/src/github.com/ava-labs/gecko/'),
         api_admin_enabled=dict(type='bool', required=False),
+        api_health_enabled=dict(type='bool', required=False),
+        api_ipcs_enabled=dict(type='bool', required=False),
         api_keystore_enabled=dict(type='bool', required=False),
         api_metrics_enabled=dict(type='bool', required=False),
         assertions_enabled=dict(type='bool', required=False),
@@ -185,6 +200,7 @@ def run_module():
         bootstrap_ips=dict(type='str', required=False),
         db_dir=dict(type='str', required=False),
         db_enabled=dict(type='bool', required=False),
+        http_host=dict(type='str', required=False),
         http_port=dict(type='int', required=False),
         http_tls_cert_file=dict(type='str', required=False),
         http_tls_enabled=dict(type='bool', required=False),
@@ -193,10 +209,12 @@ def run_module():
         log_display_level=dict(type='str', required=False),
         log_level=dict(type='str', required=False),
         network_id=dict(type='str', required=False),
+        plugin_dir=dict(type='str', required=False),
         public_ip=dict(type='str', required=False),
         signature_verification_enabled=dict(type='bool', required=False),
         snow_avalanche_batch_size=dict(type='int', required=False),
         snow_avalanche_num_parents=dict(type='int', required=False),
+        snow_concurrent_repolls=dict(type='int', required=False),
         snow_quorum_size=dict(type='int', required=False),
         snow_rogue_commit_threshold=dict(type='int', required=False),
         snow_sample_size=dict(type='int', required=False),
@@ -216,6 +234,8 @@ def run_module():
 
     ava_args = [
         'api_admin_enabled',
+        'api_health_enabled',
+        'api_ipcs_enabled',
         'api_keystore_enabled',
         'api_metrics_enabled',
         'assertions_enabled',
@@ -224,6 +244,7 @@ def run_module():
         'bootstrap_ips',
         'db_dir',
         'db_enabled',
+        'http_host',
         'http_port',
         'http_tls_cert_file',
         'http_tls_enabled',
@@ -232,10 +253,12 @@ def run_module():
         'log_display_level',
         'log_level',
         'network_id',
+        'plugin_dir',
         'public_ip',
         'signature_verification_enabled',
         'snow_avalanche_batch_size',
         'snow_avalanche_num_parents',
+        'snow_concurrent_repolls',
         'snow_quorum_size',
         'snow_rogue_commit_threshold',
         'snow_sample_size',
@@ -259,7 +282,7 @@ def run_module():
         module.params[arg] = os.path.expanduser(module.params[arg])
 
     try:
-        cmd = ['nohup', module.params['bin']]
+        cmd = [*(module.params['bin'].split())]
         for arg in ava_args:
             val = module.params[arg]
             if not (val is None):
@@ -268,11 +291,30 @@ def run_module():
                     cmd.append("{}={}".format(_arg, "true" if val else "false"))
                 else:
                     cmd.append("{}={}".format(_arg, val))
+        cmd.append(module.params['db'])
+        logdir = module.params['logdir']
+        if not (logdir is None):
+            stdout = open(os.path.expanduser(
+                os.path.join(logdir, 'stdout')), "w")
+            stderr = open(os.path.expanduser(
+                os.path.join(logdir, 'stderr')), "w")
+            nullsrc = open("/dev/null", "r")
+        else:
+            (stdout, stderr) = None, None
+
+        cwd = module.params['cwd']
+
         pid = subprocess.Popen(
-            cmd,
-            cwd=module.params['cwd'],
-            stdout=None, stderr=None, env=os.environ).pid
-        module.exit_json(changed=False, status=0, pid=pid, cmd=" ".join(cmd))
+                cmd,
+                cwd=cwd,
+                stdin=nullsrc,
+                stdout=stdout, stderr=stderr,
+                env=os.environ,
+                shell=False,
+                start_new_session=True).pid
+        module.exit_json(
+                changed=False,
+                status=0, pid=pid, cmd=" ".join(cmd), cwd=cwd)
     except (OSError, subprocess.SubprocessError) as e:
         module.fail_json(msg=str(e), changed=False, status=1)
 
