@@ -1,7 +1,12 @@
 ---
 - name: build gecko
-  command: rm ./build -r && ./scripts/build.sh
-  args:
-      chdir: "{{ gecko_repo_dir }}"
-  environment:
-      PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/lib/go-1.13/bin
+  block:
+    - file:
+        path: "{{ (gecko_repo_dir, 'build') | path_join }}"
+        state: absent
+
+    - command: ./scripts/build.sh
+      args:
+        chdir: "{{ gecko_repo_dir }}"
+      environment:
+        PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/snap/bin:/usr/lib/go-1.13/bin
