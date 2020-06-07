@@ -291,8 +291,7 @@ def run_module():
                     cmd.append("{}={}".format(_arg, "true" if val else "false"))
                 else:
                     cmd.append("{}={}".format(_arg, val))
-        cmd.append(module.params['db'])
-        logdir = module.params['logdir']
+        logdir = module.params['log_dir']
         if not (logdir is None):
             stdout = open(os.path.expanduser(
                 os.path.join(logdir, 'stdout')), "w")

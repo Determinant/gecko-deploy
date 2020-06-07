@@ -4,7 +4,8 @@
 ansible_connection: ssh
 ansible_user: ubuntu
 # change to your aws ec2 key file here
-ansible_ssh_private_key_file: ~/.ssh/ted-ava-key.pem
+#ansible_ssh_private_key_file: ~/.ssh/ted-ava-key.pem
+ansible_ssh_private_key_file: ~/.ssh/id_rsa_home
 # process name that is used by killall in reset
 bin_name: "ava"
 # remote directory that keeps the work directory for the running app
@@ -12,13 +13,15 @@ testbed_prefix: "~/testbed"
 
 ## app specific config
 
-gecko_network_id: "denali"
 # remote repo path
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
 # local source code path (that will be copied to the remote)
 gecko_local_repo_dir: "./gecko"
 gecko_db_dir: "db"
 gecko_log_dir: "log"
-gecko_staking_tls_enabled: false
-base_http_port: 20000
-base_staking_port: 21000
+gecko_network_id: "denali"
+gecko_base_http_port: 21000
+gecko_base_staking_port: 21001
+gecko_staking_tls_key_file: "/home/ubuntu/keys/staker.key"
+gecko_staking_tls_cert_file: "/home/ubuntu/keys/staker.crt"
+gecko_plugin_dir: "/home/ubuntu/go/src/github.com/ava-labs/gecko/build/plugins"

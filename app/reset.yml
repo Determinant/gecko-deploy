@@ -4,6 +4,8 @@
     db_dir: "{{ (testbed, gecko_db_dir) | path_join }}"
     log_dir: "{{ (testbed, gecko_log_dir) | path_join }}"
   block:
+    - shell: killall -9 evm || true
+      ignore_errors: true
     - name: reset database
       file:
         path: "{{ db_dir }}"

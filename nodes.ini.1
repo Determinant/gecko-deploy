@@ -1,0 +1,12 @@
+[nodes_setup]
+tedharbor.ava.network
+
+[nodes]
+bootstrap1 ansible_host=tedharbor.ava.network host_idx=0 listen_ip=127.0.0.1 gecko_staking_port=22000
+
+[nodes_non_bootstrap]
+node1 ansible_host=tedharbor.ava.network host_idx=1 listen_ip=127.0.0.1
+node2 ansible_host=tedharbor.ava.network host_idx=2 listen_ip=127.0.0.1
+
+[nodes:children]
+nodes_non_bootstrap
