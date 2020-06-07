@@ -30,3 +30,5 @@
         src: "{{ (workdir, gecko_local_repo_dir, '') | path_join }}"
         dest: "{{ gecko_repo_dir }}"
         mode: push
+        rsync_opts:
+          - "--exclude=.git"
