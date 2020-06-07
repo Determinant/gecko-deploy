@@ -1,4 +1,7 @@
 ---
+# available vars:
+# workdir -- the local directory of run_id
+
 - name: setup gecko binaries
   block:
     - apt_repository:
