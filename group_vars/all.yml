@@ -19,7 +19,7 @@ gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
 gecko_local_repo_dir: "./gecko"
 gecko_db_dir: "db"
 gecko_log_dir: "log"
-gecko_network_id: "denali"
+gecko_network_id: "cascade"
 gecko_base_http_port: 21000
 gecko_base_staking_port: 21001
 gecko_staking_tls_key_file: "/home/ubuntu/keys/staker.key"
