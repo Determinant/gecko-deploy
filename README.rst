@@ -13,7 +13,7 @@ Make sure gecko source code is in ``./gecko`` (see NOTE):
 
     git clone https://github.com/ava-labs/gecko.git
 
-Change all ``tedharbor.ava.network`` in nodes.ini to the ip of your AWS Ubuntu instance.
+Change all ips in nodes.ini to the ip of your AWS Ubuntu instance.
 
 Then install/setup the required environment on all machines (assuming the ssh
 info in ``group_vars/all.yml`` has sudo permision without password, such as
