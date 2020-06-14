@@ -50,7 +50,7 @@
         snow_avalanche_num_parents: "{{ gecko_snow_avalanche_num_parents | default(5) }}"
         snow_avalanche_batch_size: "{{ gecko_snow_avalanche_batch_size | default(30) }}"
         plugin_dir: "{{ gecko_plugin_dir | default('/home/ubuntu/go/src/github.com/ava-labs/gecko/build/plugins') }}"
-        public_ip: "{{ listen_ip | default(ansible_default_ipv4.address) }}"
+        public_ip: "{{ listen_ip | default(ansible_host) }}"
         xput_server_enabled: "{{ gecko_xput_sever_enabled | default(false) }}"
         xput_server_port: "{{ gecko_xput_sever_port | default(21002) }}"
       vars:
