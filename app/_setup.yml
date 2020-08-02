@@ -24,6 +24,22 @@
     - file:
         path: "{{ gecko_repo_dir }}"
         state: directory
+    - file:
+        path: /home/ubuntu/go/pkg/mod
+        state: absent
+      become: true
+      become_user: root
+    - shell:
+        cmd: /snap/bin/go clean --modcache
+    - synchronize:
+        archive: true
+        delete: true
+        src: "{{ (workdir, coreth_local_repo_dir, '') | path_join }}"
+        dest: "{{ coreth_repo_dir }}"
+        mode: push
+        rsync_opts:
+          - "--exclude=.git"
+      when: coreth_local_repo_dir | default('') | length > 0
     - synchronize:
         archive: true
         delete: true

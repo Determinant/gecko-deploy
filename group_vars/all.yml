@@ -16,7 +16,9 @@ testbed_prefix: "~/testbed"
 # remote repo path
 gecko_repo_dir: "~/go/src/github.com/ava-labs/gecko"
 # local source code path (that will be copied to the remote)
-gecko_local_repo_dir: "./gecko"
+gecko_local_repo_dir: "gecko"
+coreth_repo_dir: "~/go/src/github.com/ava-labs/coreth"
+# coreth_local_repo_dir: "coreth"
 gecko_db_dir: "db"
 gecko_log_dir: "log"
 gecko_network_id: "local"
